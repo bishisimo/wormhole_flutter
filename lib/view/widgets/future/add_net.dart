@@ -4,7 +4,7 @@
 @describe: 
 */
 import 'package:flutter/material.dart';
-import 'package:wormhole/core/utils/local_ip.dart';
+import 'package:wormhole/utils/local_ip.dart';
 
 class AddNetTextField extends StatefulWidget {
   @override

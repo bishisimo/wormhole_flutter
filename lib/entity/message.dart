@@ -3,6 +3,9 @@
 @time 20-5-30 下午8:11
 @describe: 
 */
+import 'package:hive/hive.dart';
+import 'package:wormhole/generated/redux.pbgrpc.dart';
+
 class TcpMessage {
   String type; //传输类型
   int index; //分片索引
@@ -47,15 +50,16 @@ class TcpMessage {
 }
 
 class UdpMsg{
-  String event;
-  String name;
-  UdpMsg(this.event,[this.name]);
+  Heat heat;
+  int port=10808;
+  UdpMsg(this.heat,[this.port]);
+
   Map<String, dynamic> toJson() => {
-    'event': event,
-    'name': name,
+    'heat': heat,
+    'port': port,
   };
   UdpMsg.fromJson(Map<String, dynamic> json) {
-    event = json['event'];
-    name = json['name'];
+    heat = json['heat'];
+    port = json['port'];
   }
 }

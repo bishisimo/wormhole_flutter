@@ -9,7 +9,7 @@
 @describe: 显示接受到的消息
 */
 import 'package:flutter/material.dart';
-import 'package:wormhole/core/server/redux.dart';
+import 'package:wormhole/server/redux.dart';
 
 class MessageAccept extends StatefulWidget {
   @override
@@ -36,7 +36,7 @@ class _MessageAcceptState extends State<MessageAccept> {
           ),
         )),
         child: Center(
-            child: SelectableText(Redux().messageStr,
+            child: SelectableText("",
                 style: TextStyle(fontFamily: "Droid"),
                 textAlign: TextAlign.center,
                 enableInteractiveSelection: true,

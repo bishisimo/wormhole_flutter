@@ -1,0 +1,1 @@
+protoc --dart_out=grpc:generated -Iprotos protos/redux.proto

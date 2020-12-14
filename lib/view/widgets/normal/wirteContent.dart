@@ -5,7 +5,7 @@
 */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wormhole/core/server/redux.dart';
+import 'package:wormhole/server/redux.dart';
 import 'package:wormhole/view/widgets/base/textDroid.dart';
 
 class WritContent extends StatefulWidget {
@@ -66,9 +66,9 @@ class _WritContentState extends State<WritContent> {
                  child: TextDroid("发送"),
                  onPressed: () => {
                    if (inputMessage.startsWith("f:")&&!inputMessage.contains("\n")){
-                     Redux().sendFileByPath(inputMessage.substring(2))
+                     // Redux().sendFileByPath(inputMessage.substring(2))
                    }else{
-                     Redux().sendString(inputMessage)
+                     // Redux().sendString(inputMessage)
                    }
                  },
                ),

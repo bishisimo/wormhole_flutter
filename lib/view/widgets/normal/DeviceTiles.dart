@@ -4,7 +4,8 @@
 @describe: 
 */
 import 'package:flutter/material.dart';
-import 'package:wormhole/core/server/redux.dart';
+import 'package:wormhole/server/redux.dart';
+import 'package:wormhole/utils/box.dart';
 import 'package:wormhole/view/widgets/base/textDroid.dart';
 
 class DeviceTiles extends StatefulWidget {
@@ -50,9 +51,9 @@ class _DeviceTilesState extends State<DeviceTiles> {
             ),
           ),
           title: TextDroid("$ip($name)"),
-          selected: ip == Redux().selectIp ? true : false,
+          selected: ip == box.get("select_ip") ? true : false,
           onTap: () => {
-          setState(() => {Redux().selectIp=ip })
+          setState(() => {box.put("select_ip", ip) })
           },
 //          trailing: Switch(
 //              value: true,

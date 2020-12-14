@@ -4,7 +4,9 @@
 @describe: 
 */
 import 'package:flutter/material.dart';
-import 'package:wormhole/core/server/redux.dart';
+import 'package:hive/hive.dart';
+import 'package:wormhole/server/redux.dart';
+import 'package:wormhole/utils/box.dart';
 
 class UserTile extends StatefulWidget {
   @override
@@ -48,9 +50,8 @@ class _UserTileState extends State<UserTile> {
           ),
           onSubmitted: (str)=>{
             changeReadOnly(),
-            setState(() {
-              Redux().myName = str;
-              Redux().broadcast("rename");
+            setState(() async {
+              box.put("self_name", str);
             })
           },
         ),

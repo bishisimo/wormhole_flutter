@@ -4,7 +4,8 @@
 @describe:
 */
 import 'package:flutter/material.dart';
-import 'package:wormhole/core/server/redux.dart';
+import 'package:grpc/grpc.dart';
+import 'package:wormhole/generated/redux.pbgrpc.dart';
 import 'package:wormhole/view/widgets/future/add_net.dart';
 import 'package:wormhole/view/widgets/normal/DeviceTiles.dart';
 import 'package:wormhole/view/widgets/normal/fileDrop.dart';
@@ -23,9 +24,9 @@ class _HomePageState extends State<HomePage> {
   List<Widget> devicesOnline = [];
   List<Widget> devicesOffline = [];
   refreshDevices(){
-    setState(() {
-      devicesOnline=createTiles(true);
-      devicesOffline=createTiles(false);
+    setState(() async {
+      devicesOnline=await createTiles(true);
+      devicesOffline=await createTiles(false);
     });
   }
 
@@ -35,15 +36,9 @@ class _HomePageState extends State<HomePage> {
 //  _HomePageState(){
 //
 //  }
+
   @override
   Widget build(BuildContext context) {
-    if(isFirstRefresh){
-      isFirstRefresh=false;
-      Redux().state=this;
-      Redux().udpServer();
-      Redux().tcpServer();
-      Redux().broadcast("online");
-    }
     refreshDevices();
     return Container(
       child: Row(
@@ -93,19 +88,27 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
 
-  List<Widget> createTiles(bool isOnline) {
+  Future<List<Device>> getDevices() async {
+    var client = ReduxClient(
+        ClientChannel('todoworld.servicestack.net', port:50054,
+            options:ChannelOptions(credentials: ChannelCredentials.insecure())));
+    var response = await client.listDevice(Empty());
+    return response.devices;
+  }
+
+  Future<List<Widget>> createTiles(bool isOnline) async {
     if (isHideEnable && isOnline || isHideDisable && !isOnline) {
       return [];
     }
     List<Widget> tiles = [];
 //    var devices = isEnable ? devicesOnline : devicesOffline;
-    Redux().devices.forEach((key, value) {
-      if (isOnline==value.isOnline){
-        tiles.add(DeviceTiles(key,value.name, isOnline));
-      }
-    });
+   var devices=await getDevices();
+   for(var device in devices){
+     if ((device.stateCode==1)==isOnline){
+       tiles.add(DeviceTiles(device.key.heat.host,device.key.heat.name, isOnline));
+     }
+   }
     if (tiles.length == 0) {
       tiles.add(Container(
         height: 30,
